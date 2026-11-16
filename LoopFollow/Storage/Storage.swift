@@ -235,6 +235,11 @@ class Storage {
     var nsAdminAuth = StorageValue<Bool>(key: "nsAdminAuth", defaultValue: false)
     var webSocketEnabled = StorageValue<Bool>(key: "webSocketEnabled", defaultValue: true)
 
+    // AI Insights (Claude). The API key itself lives in the Keychain, see ClaudeAPIKeyStore.
+    var aiInsightsModel = StorageValue<String>(key: "aiInsightsModel", defaultValue: ClaudeInsightsService.Model.opus.rawValue)
+    var aiInsightsConsent = StorageValue<Bool>(key: "aiInsightsConsent", defaultValue: false)
+    var aiInsightsFocus = StorageValue<[String]>(key: "aiInsightsFocus", defaultValue: ClaudeInsightsService.Focus.allCases.map(\.rawValue))
+
     // When adding a new migration step in `runMigrationsIfNeeded()`, bump this default
     // to the new latest step number so fresh installs skip all migrations. Other defaults
     // in this file must reflect the post-migration final state for a fresh install.

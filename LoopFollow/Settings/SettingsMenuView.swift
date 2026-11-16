@@ -64,6 +64,7 @@ enum SettingsRoute: Hashable, Identifiable {
     case remote
     case importExport
     case calendar, contact
+    case aiInsights
     case advanced
     case aggregatedStats
 
@@ -93,6 +94,7 @@ enum SettingsRoute: Hashable, Identifiable {
         case .alarmSettings: return "Alarms"
         case .calendar: return "Calendar"
         case .contact: return "Contact"
+        case .aiInsights: return "AI Insights"
         case .advanced: return "Advanced"
         case .settings, .aggregatedStats: return ""
         }
@@ -117,6 +119,7 @@ enum SettingsRoute: Hashable, Identifiable {
         case .alarmSettings: return "bell.badge"
         case .calendar: return "calendar"
         case .contact: return "person.circle"
+        case .aiInsights: return "sparkles"
         case .advanced: return "exclamationmark.shield"
         case .settings, .aggregatedStats: return ""
         }
@@ -133,6 +136,7 @@ enum SettingsRoute: Hashable, Identifiable {
             case .liveActivity: return ["dynamic island", "lock screen"]
         #endif
         case .importExport: return ["import", "export", "backup"]
+        case .aiInsights: return ["claude", "anthropic", "ai", "insights", "analysis"]
         default: return []
         }
     }
@@ -250,6 +254,11 @@ enum SettingsRoute: Hashable, Identifiable {
                 SettingsLeaf("Show Delta"),
                 SettingsLeaf("Show IOB"),
             ]
+        case .aiInsights: return [
+                SettingsLeaf("Anthropic API Key", ["api key", "claude"]),
+                SettingsLeaf("Model"),
+                SettingsLeaf("Allow sending data to Claude", ["privacy", "consent"]),
+            ]
         case .advanced: return [
                 SettingsLeaf("Download Treatments"),
                 SettingsLeaf("Download Prediction"),
@@ -287,7 +296,7 @@ enum SettingsRoute: Hashable, Identifiable {
             (.display, display),
             (.app, app),
             (.alarms, [.alarmSettings]),
-            (.integrations, [.calendar, .contact]),
+            (.integrations, nightscoutConfigured ? [.calendar, .contact, .aiInsights] : [.calendar, .contact]),
             (.advanced, [.advanced]),
         ]
     }
@@ -313,6 +322,7 @@ enum SettingsRoute: Hashable, Identifiable {
         case .importExport: ImportExportSettingsView()
         case .calendar: CalendarSettingsView()
         case .contact: ContactSettingsView(viewModel: .init())
+        case .aiInsights: AIInsightsSettingsView()
         case .advanced: AdvancedSettingsView(viewModel: .init())
         case .aggregatedStats:
             AggregatedStatsViewWrapper()

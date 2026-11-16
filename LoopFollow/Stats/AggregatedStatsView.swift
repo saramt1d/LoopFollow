@@ -16,6 +16,7 @@ struct AggregatedStatsView: View {
     @State private var loadingError = false
     @State private var loadingTimer: Timer?
     @State private var timeoutTimer: Timer?
+    @State private var showAIInsights = false
 
     init(viewModel: AggregatedStatsViewModel, onDismiss: (() -> Void)? = nil) {
         self.viewModel = viewModel
@@ -107,6 +108,14 @@ struct AggregatedStatsView: View {
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showAIInsights = true
+                } label: {
+                    Label("AI Insights", systemImage: "sparkles")
+                }
+                .disabled(isLoadingData)
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
                 Button("Refresh") {
                     loadingError = false
                     isLoadingData = true
@@ -115,6 +124,9 @@ struct AggregatedStatsView: View {
                     }
                 }
             }
+        }
+        .sheet(isPresented: $showAIInsights) {
+            AIInsightsView(statsViewModel: viewModel)
         }
         .onAppear {
             loadingError = false
